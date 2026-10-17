@@ -226,12 +226,15 @@ export const QuizCard = ({ quiz, messageId }) => {
           </div>
           <p className="leading-relaxed opacity-90">{currentQ.explanation}</p>
 
-          {currentQ.sourceTitle && (
-            <div className="flex items-center gap-1 mt-1 text-[10px] opacity-75 font-medium">
-              <BookOpen size={11} />
-              <span>
-                Source: {currentQ.sourceTitle} (Page {currentQ.sourcePage || 1})
-              </span>
+          {(currentQ.sourceTitle || (Number.isFinite(currentQ.sourcePage) && currentQ.sourcePage > 0)) && (
+            <div className="mt-2">
+              <button type = "button" onClick={() => setSourceOpen((prev) => !prev)} ariua-expanded = {sourceOpen} className = " flex items-center gap-1.5 text-xs font-medium underline cursor-pointer">
+                <BookOpen size = {13} />
+                {sourceOpen ? "Hide source" : "View source"}
+                </button>
+                {sourceOpen && ( <div className = "mt-2 rounded-lg border border-current/20 p-3">)
+                {currentQ.sourceTitle && ( <p className = "font-semibold"> {currentQ.sourceTitle}</p>)}
+                {Number.isFinite(currentQ.sourcePage) && currentQ.sourcePage> 0 && ( <p className = "mt-1"> Page {currentQ.sourcePage} </p>)}
             </div>
           )}
         </div>

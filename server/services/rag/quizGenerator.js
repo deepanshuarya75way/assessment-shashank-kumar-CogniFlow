@@ -81,7 +81,7 @@ Output MUST strictly match this JSON schema:
       "options": ["Option 1", "Option 2", "Option 3", "Option 4"],
       "correctAnswerIndex": 0,
       "explanation": "Why this is correct citing the facts.",
-      "SourceExcerptId": 2
+      "sourceExcerptId": 2
     }
   ]
 }
@@ -120,7 +120,6 @@ ${documentContext}`;
     console.error("[generateDocumentQuiz] Failed to parse quiz JSON:", parseErr);
     throw new Error("Failed to format quiz from document content");
   }
-
 
   const quizTitle = parsedQuiz.title || `${sources[0]?.title || "Document"} Mastery Quiz`;
 
