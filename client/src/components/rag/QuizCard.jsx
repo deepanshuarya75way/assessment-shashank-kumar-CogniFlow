@@ -241,6 +241,8 @@ export const QuizCard = ({ quiz, messageId }) => {
           )}
         </div>
       )}
+      </div>
+      )}
       
 
       {/* Next Question / Finish Button */}
