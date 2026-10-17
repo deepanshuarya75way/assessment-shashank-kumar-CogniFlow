@@ -28,6 +28,7 @@ export const QuizCard = ({ quiz, messageId }) => {
   };
 
   const handleNext = () => {
+    setSourceOpen(false);
     if (currentIndex < total - 1) {
       setCurrentIndex((prev) => prev + 1);
     } else {
@@ -36,6 +37,7 @@ export const QuizCard = ({ quiz, messageId }) => {
   };
 
   const handleRetake = () => {
+    setSourceOpen(false);
     setSelectedAnswers({});
     setCurrentIndex(0);
     setShowResults(false);
@@ -228,17 +230,18 @@ export const QuizCard = ({ quiz, messageId }) => {
 
           {(currentQ.sourceTitle || (Number.isFinite(currentQ.sourcePage) && currentQ.sourcePage > 0)) && (
             <div className="mt-2">
-              <button type = "button" onClick={() => setSourceOpen((prev) => !prev)} ariua-expanded = {sourceOpen} className = " flex items-center gap-1.5 text-xs font-medium underline cursor-pointer">
+              <button type = "button" onClick={() => setSourceOpen((prev) => !prev)} aria-expanded = {sourceOpen} className = " flex items-center gap-1.5 text-xs font-medium underline cursor-pointer">
                 <BookOpen size = {13} />
                 {sourceOpen ? "Hide source" : "View source"}
                 </button>
-                {sourceOpen && ( <div className = "mt-2 rounded-lg border border-current/20 p-3">)
+                {sourceOpen && ( <div className = "mt-2 rounded-lg border border-current/20 p-3">
                 {currentQ.sourceTitle && ( <p className = "font-semibold"> {currentQ.sourceTitle}</p>)}
                 {Number.isFinite(currentQ.sourcePage) && currentQ.sourcePage> 0 && ( <p className = "mt-1"> Page {currentQ.sourcePage} </p>)}
             </div>
           )}
         </div>
       )}
+      
 
       {/* Next Question / Finish Button */}
       {hasAnsweredCurrent && (

@@ -121,6 +121,25 @@ ${documentContext}`;
     throw new Error("Failed to format quiz from document content");
   }
 
+  const questions = (parsedQuiz.questions || [].map((q,idx) => {
+    const excerptId = q.sourceExcerptId;
+
+    const sourceChunk = Number.isInteger(excerptId) && excerptId <= chunks.length ? chunks[excerptId - 1] : null;
+
+    return { 
+      id: idx + 1,
+      question: q.question,
+      options:
+      Array.isArray(q.options) && q.options.length === 4 ? q.options.length === 4 ? q.options : ["True", "False", "Partially", "None"],
+      correctAnswerIndex:
+      NumberisInteger(q.correctAnswerIndex) && q.correctAnswerIndex >= 0 && q.correctAnswerIndex <= 3 ? q.correctAnswerIndex : 0,
+      explanation:
+      q.explanation || "Refer to the source document for details.",
+
+      ...(sourceChunk?.source?.title || sourceChunk?.source.originalName ? { sourceTitle: sourceChunk?.source.title || sourceChunk.source.originalName,} : {}),
+    }
+  }));
+
   const quizTitle = parsedQuiz.title || `${sources[0]?.title || "Document"} Mastery Quiz`;
 
   // 3. Save as Message in DB
