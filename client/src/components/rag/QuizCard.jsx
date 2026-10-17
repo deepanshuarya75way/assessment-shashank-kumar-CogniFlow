@@ -230,7 +230,7 @@ export const QuizCard = ({ quiz, messageId }) => {
 
           {(currentQ.sourceTitle || (Number.isFinite(currentQ.sourcePage) && currentQ.sourcePage > 0)) && (
             <div className="mt-2">
-              <button type = "button" onClick={() => setSourceOpen((prev) => !prev)} aria-expanded = {sourceOpen} className = " flex items-center gap-1.5 text-xs font-medium underline cursor-pointer">
+              <button type = "button" onClick={() => setSourceOpen((prev) => !prev)} aria-expanded={sourceOpen} className = " flex items-center gap-1.5 text-xs font-medium underline cursor-pointer">
                 <BookOpen size = {13} />
                 {sourceOpen ? "Hide source" : "View source"}
                 </button>

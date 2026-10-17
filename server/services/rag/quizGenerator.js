@@ -68,8 +68,7 @@ Each question must have:
 - Exactly 4 plausible options (labeled conceptually A, B, C, D).
 - "correctAnswerIndex": integer from 0 to 3 corresponding to the correct option.
 - "explanation": a clear 1-2 sentence explanation of why this answer is correct.
-- "sourceTitle": title of the source document where this fact was found.
-- "sourcePage": page number where this fact was found (integer).
+- "sourceExcerptId" : integer ID of the excerpt that supports the quetion; use null of no excerpt can be confidently identified.
 
 Output MUST strictly match this JSON schema:
 {
@@ -121,24 +120,26 @@ ${documentContext}`;
     throw new Error("Failed to format quiz from document content");
   }
 
-  const questions = (parsedQuiz.questions || [].map((q,idx) => {
+  const questions = (parsedQuiz.questions || []).map((q,idx) => {
     const excerptId = q.sourceExcerptId;
 
-    const sourceChunk = Number.isInteger(excerptId) && excerptId <= chunks.length ? chunks[excerptId - 1] : null;
+    const sourceChunk = Number.isInteger(excerptId) && excerptId >= 1 && excerptId <= chunks.length ? chunks[excerptId - 1] : null;
 
     return { 
       id: idx + 1,
       question: q.question,
       options:
-      Array.isArray(q.options) && q.options.length === 4 ? q.options.length === 4 ? q.options : ["True", "False", "Partially", "None"],
+      Array.isArray(q.options) && q.options.length === 4 ? q.options : ["True", "False", "Partially", "None"],
       correctAnswerIndex:
-      NumberisInteger(q.correctAnswerIndex) && q.correctAnswerIndex >= 0 && q.correctAnswerIndex <= 3 ? q.correctAnswerIndex : 0,
+      Number.isInteger(q.correctAnswerIndex) && q.correctAnswerIndex >= 0 && q.correctAnswerIndex <= 3 ? q.correctAnswerIndex : 0,
       explanation:
       q.explanation || "Refer to the source document for details.",
 
-      ...(sourceChunk?.source?.title || sourceChunk?.source.originalName ? { sourceTitle: sourceChunk?.source.title || sourceChunk.source.originalName,} : {}),
+      ...(sourceChunk?.source?.title || sourceChunk?.source?.originalName ? { sourceTitle: sourceChunk?.source.title || sourceChunk.source.originalName,} : {}),
+
+      ...(Number.isFinite(sourceChunk?.page) && sourceChunk.page > 0 ? {sourcePage: sourceChunk.page} : {}),
     }
-  }));
+  });
 
   const quizTitle = parsedQuiz.title || `${sources[0]?.title || "Document"} Mastery Quiz`;
 
