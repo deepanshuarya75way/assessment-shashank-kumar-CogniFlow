@@ -8,6 +8,7 @@ export const QuizCard = ({ quiz, messageId }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedAnswers, setSelectedAnswers] = useState({}); // { [questionIdx]: selectedOptionIdx }
   const [showResults, setShowResults] = useState(false);
+  const [sourceOpen, setSourceOpen] = useState(false);
 
   if (!questions || total === 0) {
     return null;

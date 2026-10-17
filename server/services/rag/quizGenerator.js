@@ -56,7 +56,7 @@ export const generateDocumentQuiz = async ({
   const documentContext = chunks
     .map(
       (c, idx) =>
-        `[Document ${idx + 1}: "${c.source?.title || "Document"}", Page: ${c.page || 1}]\n${c.text}`
+        `[Excerpt ID ${idx + 1}] Source title: ${c.source?.title|| c.source?.originalName || "Unknown source"} Page: ${c.page || ""} Content: ${c.text}`
     )
     .join("\n\n---\n\n");
 
@@ -81,8 +81,7 @@ Output MUST strictly match this JSON schema:
       "options": ["Option 1", "Option 2", "Option 3", "Option 4"],
       "correctAnswerIndex": 0,
       "explanation": "Why this is correct citing the facts.",
-      "sourceTitle": "Document Name",
-      "sourcePage": 1
+      "SourceExcerptId": 2
     }
   ]
 }
@@ -122,15 +121,6 @@ ${documentContext}`;
     throw new Error("Failed to format quiz from document content");
   }
 
-  const questions = (parsedQuiz.questions || []).map((q, idx) => ({
-    id: idx + 1,
-    question: q.question,
-    options: Array.isArray(q.options) && q.options.length === 4 ? q.options : ["True", "False", "Partially", "None"],
-    correctAnswerIndex: typeof q.correctAnswerIndex === "number" && q.correctAnswerIndex >= 0 && q.correctAnswerIndex <= 3 ? q.correctAnswerIndex : 0,
-    explanation: q.explanation || "Refer to the source document for details.",
-    sourceTitle: q.sourceTitle || sources[0]?.title || "Uploaded Document",
-    sourcePage: q.sourcePage || 1,
-  }));
 
   const quizTitle = parsedQuiz.title || `${sources[0]?.title || "Document"} Mastery Quiz`;
 
